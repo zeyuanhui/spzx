@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>额度审批信息登记</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #2c3e50;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+
+    .contact-group {
+      background: #f9fafb;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+    }
+
+    .contact-group h3 {
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #2980b9;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .privacy-note {
+      font-size: 14px;
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #eee;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    /* 全屏 Loading 动画 */
+    @keyframes grow {
+      0%, 40%, 100% { transform: scaleY(0.2); opacity: 0.6; }
+      20% { transform: scaleY(1); opacity: 1; }
+    }
+
+    /* 全屏页面通用样式 */
+    #loading, #winner {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .container { padding: 20px; }
+      h1 { font-size: 24px; }
+      button { font-size: 16px; }
+      .form-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 表单页面 -->
+  <div id="form-page" class="container">
+    <h1>请填写登记信息</h1>
+    <form id="info-form">
+      <div class="form-group">
+        <label for="name">姓名</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="phone">手机号</label>
+        <input type="tel" id="phone" name="phone" required inputmode="numeric" />
+      </div>
+      <div class="form-group">
+        <label for="id-card">身份证号</label>
+        <input type="text" id="id-card" name="id-card" required maxlength="18" />
+      </div>
+      <div class="form-group">
+        <label for="address">家庭住址</label>
+        <input type="text" id="address" name="address" required />
+      </div>
+
+      <!-- 常用联系人1 -->
+      <div class="contact-group">
+        <h3>常用联系人1</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="relation1">与本人关系</label>
+            <input type="text" id="relation1" name="relation1" required />
+          </div>
+          <div class="form-group">
+            <label for="contact1-name">姓名</label>
+            <input type="text" id="contact1-name" name="contact1-name" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contact1-phone">手机号</label>
+          <input type="tel" id="contact1-phone" name="contact1-phone" required inputmode="numeric" />
+        </div>
+      </div>
+
+      <!-- 常用联系人2 -->
+      <div class="contact-group">
+        <h3>常用联系人2</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="relation2">与本人关系</label>
+            <input type="text" id="relation2" name="relation2" required />
+          </div>
+          <div class="form-group">
+            <label for="contact2-name">姓名</label>
+            <input type="text" id="contact2-name" name="contact2-name" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contact2-phone">手机号</label>
+          <input type="tel" id="contact2-phone" name="contact2-phone" required inputmode="numeric" />
+        </div>
+      </div>
+
+      <!-- 隐私提示 -->
+      <div class="privacy-note">
+        个人信息加密保护中，仅用于身份验证获取额度
+      </div>
+
+      <button type="submit">提交</button>
+    </form>
+  </div>
+
+  <!-- 全屏 Loading 页面 -->
+  <div id="loading">
+    <div style="display: flex; gap: 4px; height: 40px; margin-bottom: 20px;">
+      <div style="width: 8px; background: #3498db; border-radius: 4px; animation: grow 1.8s infinite ease-in-out; transform-origin: bottom; animation-delay: -0.48s;"></div>
+      <div style="width: 8px; background: #3498db; border-radius: 4px; animation: grow 1.8s infinite ease-in-out; transform-origin: bottom; animation-delay: -0.36s;"></div>
+      <div style="width: 8px; background: #3498db; border-radius: 4px; animation: grow 1.8s infinite ease-in-out; transform-origin: bottom; animation-delay: -0.24s;"></div>
+      <div style="width: 8px; background: #3498db; border-radius: 4px; animation: grow 1.8s infinite ease-in-out; transform-origin: bottom; animation-delay: -0.12s;"></div>
+      <div style="width: 8px; background: #3498db; border-radius: 4px; animation: grow 1.8s infinite ease-in-out; transform-origin: bottom;"></div>
+    </div>
+    <p style="font-size: 18px; color: #2c3e50;">正在分析数据，请稍候…</p>
+  </div>
+
+  <!-- 全屏成功页面 -->
+<div id="winner">
+  <div style="max-width: 500px; padding: 30px; background: #f9fdfb; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.05); text-align: center;">
+    <div style="font-size: 24px; color: #27ae60; margin-bottom: 20px;">
+      🎉 恭喜你已获批
+    </div>
+    <!-- 成功页中的金额区域 -->
+<div style="font-size: 48px; font-weight: bold; color: #2ecc71; margin: 0 0 24px 0; line-height: 1.2; display: flex; justify-content: center; align-items: center; gap: 6px;">
+  <span id="amount-display">0</span>
+  <span style="font-size: 28px; font-weight: normal;">元</span>
+</div>
+    <p style="font-size: 16px; color: #2c3e50; line-height: 1.6;">
+      请留意电话通知，我们将尽快与您联系！
+    </p>
+    <button onclick="resetToForm()" style="margin-top: 20px; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
+      重新填写
+    </button>
+  </div>
+</div>
+
+  <script>
+    // 👇 页面加载时强制重置为表单页（关键！）
+    window.addEventListener('load', function () {
+      document.getElementById('form-page').style.display = 'block';
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('winner').style.display = 'none';
+    });
+
+    // 重新填写函数
+    function resetToForm() {
+      document.getElementById('winner').style.display = 'none';
+      document.getElementById('form-page').style.display = 'block';
+      document.getElementById('info-form').reset();
+    }
+
+    // 表单提交处理
+    document.getElementById('info-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // 获取所有字段
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const idCard = document.getElementById('id-card').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const relation1 = document.getElementById('relation1').value.trim();
+      const contact1Name = document.getElementById('contact1-name').value.trim();
+      const contact1Phone = document.getElementById('contact1-phone').value.trim();
+      const relation2 = document.getElementById('relation2').value.trim();
+      const contact2Name = document.getElementById('contact2-name').value.trim();
+      const contact2Phone = document.getElementById('contact2-phone').value.trim();
+
+      // 非空校验
+      if (!name || !phone || !idCard || !address || 
+          !relation1 || !contact1Name || !contact1Phone || 
+          !relation2 || !contact2Name || !contact2Phone) {
+        alert('请填写所有必填项');
+        return;
+      }
+
+      // 手机号校验
+      const isValidPhone = (num) => /^1[3-9]\d{9}$/.test(num);
+      if (!isValidPhone(phone) || !isValidPhone(contact1Phone) || !isValidPhone(contact2Phone)) {
+        alert('请输入正确的11位中国大陆手机号');
+        return;
+      }
+
+      // 身份证校验
+      if (!/^\d{17}[\dXx]$/.test(idCard)) {
+        alert('请输入正确的18位身份证号码');
+        return;
+      }
+
+      // 隐藏表单，显示 loading
+      document.getElementById('form-page').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+
+      // 生成随机额度（150000~250000，100整数倍）
+      const min = 150000;
+      const max = 250000;
+      const step = 100;
+      const randomValue = Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
+
+ function animateAmount(targetElement, start, end, duration) {
+    const startTime = performance.now();
+    const range = end - start;
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(start + range * eased);
+      targetElement.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+
+      // 5秒后显示结果
+      setTimeout(function () {
+        document.getElementById('loading').style.display = 'none';
+         document.getElementById('winner').style.display = 'flex';
+    animateAmount(document.getElementById('amount-display'), 0, randomValue, 1000);
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
